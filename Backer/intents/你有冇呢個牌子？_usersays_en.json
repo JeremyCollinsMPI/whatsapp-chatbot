@@ -1,0 +1,51 @@
+[
+  {
+    "id": "cd80f7f0-5777-408a-9ee6-c3e2e5657500",
+    "data": [
+      {
+        "text": "你有冇",
+        "userDefined": false
+      },
+      {
+        "text": "sulhwasoo",
+        "meta": "@brand",
+        "alias": "brand",
+        "userDefined": true
+      },
+      {
+        "text": "?",
+        "userDefined": false
+      }
+    ],
+    "isTemplate": false,
+    "count": 0,
+    "lang": "en",
+    "updated": 0
+  },
+  {
+    "id": "2854f2de-1bd4-46db-afd9-745fbda860b0",
+    "data": [
+      {
+        "text": "你有冇呢個牌子？",
+        "userDefined": false
+      }
+    ],
+    "isTemplate": false,
+    "count": 0,
+    "lang": "en",
+    "updated": 0
+  },
+  {
+    "id": "8de3d629-169b-49a3-862a-6dd5556d1136",
+    "data": [
+      {
+        "text": "呢個會有嗎？",
+        "userDefined": false
+      }
+    ],
+    "isTemplate": false,
+    "count": 0,
+    "lang": "en",
+    "updated": 0
+  }
+]

@@ -1,0 +1,15 @@
+[
+  {
+    "id": "defective goods_input",
+    "data": [
+      {
+        "text": "my goods were delivered but are broken",
+        "userDefined": false
+      }
+    ],
+    "isTemplate": false,
+    "count": 0,
+    "lang": "en",
+    "updated": 0
+  }
+]

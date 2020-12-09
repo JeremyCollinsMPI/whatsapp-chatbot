@@ -1,0 +1,40 @@
+[
+  {
+    "id": "a1406267-a293-4ec8-b433-feec054c5f39",
+    "data": [
+      {
+        "text": "2",
+        "meta": "@sys.cardinal",
+        "alias": "cardinal",
+        "userDefined": true
+      }
+    ],
+    "isTemplate": false,
+    "count": 0,
+    "lang": "en",
+    "updated": 0
+  },
+  {
+    "id": "c33476be-747b-43bc-b837-c4f6cd646e71",
+    "data": [
+      {
+        "text": "我要",
+        "userDefined": false
+      },
+      {
+        "text": "五",
+        "meta": "@sys.cardinal",
+        "alias": "cardinal",
+        "userDefined": true
+      },
+      {
+        "text": "個",
+        "userDefined": false
+      }
+    ],
+    "isTemplate": false,
+    "count": 0,
+    "lang": "en",
+    "updated": 0
+  }
+]

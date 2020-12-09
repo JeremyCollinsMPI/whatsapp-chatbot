@@ -1,0 +1,66 @@
+{
+  "id": "944e14ec-2777-4cc0-b040-c9a2a31e2871",
+  "parentId": "6840c276-ce47-4db2-90d2-645de92a86a5",
+  "rootParentId": "6840c276-ce47-4db2-90d2-645de92a86a5",
+  "name": "3.1.1 Name",
+  "auto": true,
+  "contexts": [
+    "3Covidlandingmessage-followup"
+  ],
+  "responses": [
+    {
+      "resetContexts": false,
+      "action": "3Covidlandingmessage.3Covidlandingmessage-custom",
+      "affectedContexts": [
+        {
+          "name": "311Name-followup",
+          "lifespan": 2
+        }
+      ],
+      "parameters": [
+        {
+          "id": "7b03c11f-66b3-4008-a4f2-2a8a70ff044a",
+          "name": "person",
+          "required": false,
+          "dataType": "@sys.person",
+          "value": "$person",
+          "defaultValue": "",
+          "isList": false,
+          "prompts": [],
+          "promptMessages": [],
+          "noMatchPromptMessages": [],
+          "noInputPromptMessages": [],
+          "outputDialogContexts": []
+        }
+      ],
+      "messages": [
+        {
+          "type": "0",
+          "title": "",
+          "textToSpeech": "",
+          "lang": "en",
+          "speech": [
+            "store_name $person"
+          ],
+          "condition": ""
+        },
+        {
+          "type": "0",
+          "title": "",
+          "textToSpeech": "",
+          "lang": "zh-hk",
+          "condition": ""
+        }
+      ],
+      "speech": []
+    }
+  ],
+  "priority": 500000,
+  "webhookUsed": false,
+  "webhookForSlotFilling": false,
+  "fallbackIntent": false,
+  "events": [],
+  "conditionalResponses": [],
+  "condition": "",
+  "conditionalFollowupEvents": []
+}

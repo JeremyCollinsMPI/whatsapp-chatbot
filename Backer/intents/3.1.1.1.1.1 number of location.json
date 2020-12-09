@@ -1,0 +1,66 @@
+{
+  "id": "707488ad-f6b9-48d0-a328-e5bd17aec9fc",
+  "parentId": "8b1660f2-73e9-49bf-9f2c-0e287a7583e1",
+  "rootParentId": "6840c276-ce47-4db2-90d2-645de92a86a5",
+  "name": "3.1.1.1.1.1 number of location",
+  "auto": true,
+  "contexts": [
+    "31111-followup"
+  ],
+  "responses": [
+    {
+      "resetContexts": false,
+      "action": "3Covidlandingmessage.3Covidlandingmessage-custom.311Name-custom.3111Amount-custom.31111-custom",
+      "affectedContexts": [
+        {
+          "name": "311111numberoflocation-followup",
+          "lifespan": 2
+        }
+      ],
+      "parameters": [
+        {
+          "id": "b61d8db5-744c-4c11-80d8-4c461549094b",
+          "name": "cardinal",
+          "required": false,
+          "dataType": "@sys.cardinal",
+          "value": "$cardinal",
+          "defaultValue": "",
+          "isList": false,
+          "prompts": [],
+          "promptMessages": [],
+          "noMatchPromptMessages": [],
+          "noInputPromptMessages": [],
+          "outputDialogContexts": []
+        }
+      ],
+      "messages": [
+        {
+          "type": "0",
+          "title": "",
+          "textToSpeech": "",
+          "lang": "en",
+          "speech": [
+            "store_location_number  $cardinal"
+          ],
+          "condition": ""
+        },
+        {
+          "type": "0",
+          "title": "",
+          "textToSpeech": "",
+          "lang": "zh-hk",
+          "condition": ""
+        }
+      ],
+      "speech": []
+    }
+  ],
+  "priority": 500000,
+  "webhookUsed": false,
+  "webhookForSlotFilling": false,
+  "fallbackIntent": false,
+  "events": [],
+  "conditionalResponses": [],
+  "condition": "",
+  "conditionalFollowupEvents": []
+}

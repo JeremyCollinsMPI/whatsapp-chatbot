@@ -1,0 +1,51 @@
+{
+  "id": "8b1660f2-73e9-49bf-9f2c-0e287a7583e1",
+  "parentId": "dcc4ac93-0ffd-440c-be67-eab6830b1023",
+  "rootParentId": "6840c276-ce47-4db2-90d2-645de92a86a5",
+  "name": "3.1.1.1.1 我要取貨",
+  "auto": true,
+  "contexts": [
+    "3111Amount-followup"
+  ],
+  "responses": [
+    {
+      "resetContexts": false,
+      "action": "3Covidlandingmessage.3Covidlandingmessage-custom.311Name-custom.3111Amount-custom",
+      "affectedContexts": [
+        {
+          "name": "31111-followup",
+          "lifespan": 2
+        }
+      ],
+      "parameters": [],
+      "messages": [
+        {
+          "type": "0",
+          "title": "",
+          "textToSpeech": "",
+          "lang": "en",
+          "speech": [
+            "請選一個自行取貨點 :\n1) 瓏門冰室銅鑼灣分店\n2) 瓏門冰室尖沙嘴分店\n3) 瓏門冰室沙田分店\n4) 瓏門冰室荃灣分店\n5) 瓏門冰室屯門分店\n6) Maxi House 黃竹坑道49號得力工業大廈16樓F室 (星期一至五 9:00-17:00)"
+          ],
+          "condition": ""
+        },
+        {
+          "type": "0",
+          "title": "",
+          "textToSpeech": "",
+          "lang": "zh-hk",
+          "condition": ""
+        }
+      ],
+      "speech": []
+    }
+  ],
+  "priority": 500000,
+  "webhookUsed": false,
+  "webhookForSlotFilling": false,
+  "fallbackIntent": false,
+  "events": [],
+  "conditionalResponses": [],
+  "condition": "",
+  "conditionalFollowupEvents": []
+}

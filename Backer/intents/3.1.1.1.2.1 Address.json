@@ -1,0 +1,66 @@
+{
+  "id": "e42cc98c-13e0-414b-919c-893b9a2056e3",
+  "parentId": "985187df-85a2-4af5-94db-690ae8c10257",
+  "rootParentId": "6840c276-ce47-4db2-90d2-645de92a86a5",
+  "name": "3.1.1.1.2.1 Address",
+  "auto": true,
+  "contexts": [
+    "31112-followup"
+  ],
+  "responses": [
+    {
+      "resetContexts": false,
+      "action": "3Covidlandingmessage.3Covidlandingmessage-custom.311Name-custom.3111Amount-custom.31112-custom",
+      "affectedContexts": [
+        {
+          "name": "311121Address-followup",
+          "lifespan": 2
+        }
+      ],
+      "parameters": [
+        {
+          "id": "e8d34a23-1042-405a-8508-2edc2c0bdb8e",
+          "name": "address",
+          "required": false,
+          "dataType": "@sys.address",
+          "value": "$address",
+          "defaultValue": "",
+          "isList": false,
+          "prompts": [],
+          "promptMessages": [],
+          "noMatchPromptMessages": [],
+          "noInputPromptMessages": [],
+          "outputDialogContexts": []
+        }
+      ],
+      "messages": [
+        {
+          "type": "0",
+          "title": "",
+          "textToSpeech": "",
+          "lang": "en",
+          "speech": [
+            "store_address $address"
+          ],
+          "condition": ""
+        },
+        {
+          "type": "0",
+          "title": "",
+          "textToSpeech": "",
+          "lang": "zh-hk",
+          "condition": ""
+        }
+      ],
+      "speech": []
+    }
+  ],
+  "priority": 500000,
+  "webhookUsed": false,
+  "webhookForSlotFilling": false,
+  "fallbackIntent": false,
+  "events": [],
+  "conditionalResponses": [],
+  "condition": "",
+  "conditionalFollowupEvents": []
+}

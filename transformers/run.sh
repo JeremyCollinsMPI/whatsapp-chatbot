@@ -1,0 +1,1 @@
+docker run -it --rm -v $PWD:/src --name transformers jeremycollinsmpi/transformers /bin/bash

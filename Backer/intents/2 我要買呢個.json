@@ -1,13 +1,18 @@
 {
-  "id": "9a2619ac-ba0a-4edd-8c70-96d5bedf0bac",
-  "name": "Default Welcome Intent",
+  "id": "707de418-42d3-4240-beef-5bc553ea24b9",
+  "name": "2 我要買呢個",
   "auto": true,
   "contexts": [],
   "responses": [
     {
       "resetContexts": false,
-      "action": "input.welcome",
-      "affectedContexts": [],
+      "action": "",
+      "affectedContexts": [
+        {
+          "name": "-followup",
+          "lifespan": 2
+        }
+      ],
       "parameters": [],
       "messages": [
         {
@@ -16,10 +21,7 @@
           "textToSpeech": "",
           "lang": "en",
           "speech": [
-            "Hi! How are you doing?",
-            "Hello! How can I help you?",
-            "Good day! What can I do for you today?",
-            "Greetings! How can I assist?"
+            "你要買幾多？"
           ],
           "condition": ""
         }
@@ -31,11 +33,7 @@
   "webhookUsed": false,
   "webhookForSlotFilling": false,
   "fallbackIntent": false,
-  "events": [
-    {
-      "name": "WELCOME"
-    }
-  ],
+  "events": [],
   "conditionalResponses": [],
   "condition": "",
   "conditionalFollowupEvents": []

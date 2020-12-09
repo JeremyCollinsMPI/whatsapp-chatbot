@@ -1,20 +1,33 @@
 {
-  "id": "99bc0d77-53f5-42c6-9d31-198be35d2a5b",
-  "name": "你有冇呢個牌子？",
+  "id": "2fc420a4-e4fe-474a-9d0d-8b9b94d72073",
+  "parentId": "707de418-42d3-4240-beef-5bc553ea24b9",
+  "rootParentId": "707de418-42d3-4240-beef-5bc553ea24b9",
+  "name": "2.1 我要五個 - custom",
   "auto": true,
-  "contexts": [],
+  "contexts": [
+    "-followup"
+  ],
   "responses": [
     {
       "resetContexts": false,
-      "action": "",
-      "affectedContexts": [],
+      "action": ".-custom",
+      "affectedContexts": [
+        {
+          "name": "-custom-followup",
+          "lifespan": 2
+        },
+        {
+          "name": "21-custom-followup",
+          "lifespan": 2
+        }
+      ],
       "parameters": [
         {
-          "id": "81daaa22-865b-42f4-ac2d-8bccad919409",
-          "name": "brand",
+          "id": "48916318-ae30-4670-8b5e-8e245d44d20f",
+          "name": "cardinal",
           "required": false,
-          "dataType": "@brand",
-          "value": "$brand",
+          "dataType": "@sys.cardinal",
+          "value": "$cardinal",
           "defaultValue": "",
           "isList": false,
           "prompts": [],
@@ -31,8 +44,15 @@
           "textToSpeech": "",
           "lang": "en",
           "speech": [
-            "call_api"
+            "multiply_by $cardinal"
           ],
+          "condition": ""
+        },
+        {
+          "type": "0",
+          "title": "",
+          "textToSpeech": "",
+          "lang": "zh-hk",
           "condition": ""
         }
       ],

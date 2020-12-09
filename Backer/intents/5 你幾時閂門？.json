@@ -1,6 +1,6 @@
 {
-  "id": "a6b5e911-3d27-4974-a336-fbbaf3841d11",
-  "name": "black friday",
+  "id": "824ae484-0d4b-4d66-a64c-2699900a9ed8",
+  "name": "5 你幾時閂門？",
   "auto": true,
   "contexts": [],
   "responses": [
@@ -16,7 +16,7 @@
           "textToSpeech": "",
           "lang": "en",
           "speech": [
-            "The Black Friday shopping festival is coming.  Get a $100 e-coupon when you purchase more than $600 worth of goods between the 13th and 16th of November."
+            "我哋7點閂門"
           ],
           "condition": ""
         }

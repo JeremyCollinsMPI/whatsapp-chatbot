@@ -1,1 +1,0 @@
-docker run -it --rm -v $PWD:/src -p 5000:5000 --name chatbot jeremycollinsmpi/chatbot python tests.py

@@ -1,6 +1,6 @@
 {
-  "id": "707de418-42d3-4240-beef-5bc553ea24b9",
-  "name": "我要買呢個",
+  "id": "a582aebe-388f-4ca7-a4bd-35f3b7f10f9e",
+  "name": "6 我可以五點來",
   "auto": true,
   "contexts": [],
   "responses": [
@@ -16,7 +16,7 @@
           "textToSpeech": "",
           "lang": "en",
           "speech": [
-            "你要怎麼付款？"
+            "好的，已通知同事"
           ],
           "condition": ""
         }

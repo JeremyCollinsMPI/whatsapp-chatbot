@@ -2,6 +2,7 @@ from submit_to_dialog_flow import *
 from chatdaddy import *
 from process_response import *
 from time import sleep
+from new_flow import *
 
 def test1():
   send_message('hello')
@@ -111,11 +112,21 @@ def test19():
   response = new_submit('我要買呢個')
   print(response)
   sleep(3)
-  response = process_need_call_api(new_submit('我要買五個'))
+  response = new_submit('我要買五個')
   print(response)
   
+def test20():
+  print(translate('我要買五個'))
 
-test17()
+def test21():
+  conversation = ['我要買呢個', '我要買五個', '面交', '你幾時閂門？', '我可以五點來']
+  for x in conversation:
+    response = process_need_call_api(submit(x))
+    print(response)
+    sleep(2)
+
+
+test21()
 
 
 

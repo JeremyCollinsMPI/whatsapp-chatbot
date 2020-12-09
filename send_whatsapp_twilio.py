@@ -1,15 +1,14 @@
 from twilio.rest import Client 
- 
+from secrets import * 
 
-# removed authorisation
 client = Client(account_sid, auth_token) 
 
 
 def send_message(sentence):
 
   message = client.messages.create( 
-#                               from_= removed phone number,  
+                              from_= phone_number_1,  
                               body=sentence,      
-#                               to='whatsapp removed phone number' 
+                              to= phone_number_2 
                           ) 
  

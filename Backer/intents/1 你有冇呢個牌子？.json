@@ -1,6 +1,6 @@
 {
-  "id": "b15e2f7d-8366-4d8a-92a4-b831b6b68c0a",
-  "name": "product not available",
+  "id": "99bc0d77-53f5-42c6-9d31-198be35d2a5b",
+  "name": "1 你有冇呢個牌子？",
   "auto": true,
   "contexts": [],
   "responses": [
@@ -8,7 +8,22 @@
       "resetContexts": false,
       "action": "",
       "affectedContexts": [],
-      "parameters": [],
+      "parameters": [
+        {
+          "id": "3256eb50-da79-484c-beb8-8e088af03c48",
+          "name": "brand",
+          "required": false,
+          "dataType": "@brand",
+          "value": "$brand",
+          "defaultValue": "",
+          "isList": false,
+          "prompts": [],
+          "promptMessages": [],
+          "noMatchPromptMessages": [],
+          "noInputPromptMessages": [],
+          "outputDialogContexts": []
+        }
+      ],
       "messages": [
         {
           "type": "0",
@@ -16,8 +31,7 @@
           "textToSpeech": "",
           "lang": "en",
           "speech": [
-            "唔好意思 我哋冇呢個牌子🙏",
-            "我哋暫時未有呢個牌子🙏"
+            "call_api"
           ],
           "condition": ""
         }

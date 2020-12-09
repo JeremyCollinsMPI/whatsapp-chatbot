@@ -1,6 +1,6 @@
 {
-  "id": "24bfa829-287a-47cf-9036-55b4f02d7dec",
-  "name": "pricing",
+  "id": "b15e2f7d-8366-4d8a-92a4-b831b6b68c0a",
+  "name": "1.1 product not available",
   "auto": true,
   "contexts": [],
   "responses": [
@@ -8,22 +8,7 @@
       "resetContexts": false,
       "action": "",
       "affectedContexts": [],
-      "parameters": [
-        {
-          "id": "efeef480-2138-43e4-ae8e-d527750d8827",
-          "name": "pricing",
-          "required": false,
-          "dataType": "@pricing",
-          "value": "$pricing",
-          "defaultValue": "",
-          "isList": false,
-          "prompts": [],
-          "promptMessages": [],
-          "noMatchPromptMessages": [],
-          "noInputPromptMessages": [],
-          "outputDialogContexts": []
-        }
-      ],
+      "parameters": [],
       "messages": [
         {
           "type": "0",
@@ -31,7 +16,8 @@
           "textToSpeech": "",
           "lang": "en",
           "speech": [
-            "hello"
+            "唔好意思 我哋冇呢個牌子🙏",
+            "我哋暫時未有呢個牌子🙏"
           ],
           "condition": ""
         }

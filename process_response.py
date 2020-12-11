@@ -1,8 +1,8 @@
 from kol import *
 from submit_to_dialog_flow import *
 from ocr import *
-
-
+from datetime import datetime
+from datetime import time
 
 def recognise_image_text(image):
   return detect_text('1.png')
@@ -108,11 +108,34 @@ def finished_pickup(text):
   else:
     return False 
 
+def check_time(text):
+  if 'check_time' in text:
+    return True
+  else:
+    return False
+
 def produce_report(chat_manager):
   file = open('Orders.csv', 'a')
   file.write('\n')
-  file.write('\t'.join([chat_manager.covid_data['name'], chat_manager.covid_data['address'], chat_manager.covid_data['phone_number'], chat_manager.covid_data['amount']]))
+  file.write('\t'.join([chat_manager.covid_data['name'], chat_manager.covid_data['address'], chat_manager.covid_data['phone_number'], chat_manager.covid_data['amount'], chat_manager.covid_data['pickup_time']]))
   file.close()
+
+
+def make_time(time_str):
+  return datetime.strptime(time_str, '%H:%M:%S').time()
+
+def is_possible_time(text):
+  time_str = text.split('check_time ')[1]
+  time_object = make_time(time_str)
+  nine_am = make_time('09:00:00')
+  six_pm = time(18, 0, 0)
+  if time_object < nine_am:
+    hour = time_object.hour
+    minute = time_object.minute
+    time_object = time(hour + 12, minute, 0)
+  if time_object < six_pm:
+    return True, time_object.strftime('%H:%M')
+  return False, time_object.strftime('%H:%M')
 
 def process_need_call_api(response, chat_manager=None):
   text = get_text(response)
@@ -124,7 +147,7 @@ def process_need_call_api(response, chat_manager=None):
       response = submit('product not available')
       return get_text(response), chat_manager
     else:
-      response = '我哋有呢個牌子：\n' + '\n'.join([x['nameHk'] for x in result['data']['list']])
+      response = '我哋有呢個牌子：\n' + '\ns'.join([x['nameHk'] for x in result['data']['list']])
       return response, chat_manager
   if need_to_multiply(text):
     amount = int(text.replace('multiply_by ', ''))
@@ -135,16 +158,17 @@ def process_need_call_api(response, chat_manager=None):
 你叫咩名？ '''
     return response, chat_manager
   if store_name(text):
-    name = text.split('store_name')[1]
+    name = text.split('store_name ')[1]
     chat_manager.covid_data['name'] = name
     return '你想要幾多? (每人限量購買10枝)', chat_manager
   if store_amount(text):
-    amount = text.split('store_amount')[1]
+    amount = text.split('store_amount ')[1]
     chat_manager.covid_data['amount'] = amount
     return '你要來我哋嘅分店取定係畀一個送貨地址？', chat_manager
   if store_address(text):
-    address = text.split('store_address')[1]
+    address = text.split('store_address ')[1]
     chat_manager.covid_data['address'] = address
+    chat_manager.covid_data['pickup_time'] = ''
     return '''產品名稱: Arista 即驗即知「新冠病毒」快速測試棒 
     數量: ''' + chat_manager.covid_data['amount'] + '''
     收件人: ''' + chat_manager.covid_data['name'] + '''
@@ -166,8 +190,15 @@ def process_need_call_api(response, chat_manager=None):
     produce_report(chat_manager)
     return '謝謝😊我們寄出後會給你順豐號的🙏', chat_manager
   if finished_pickup(text):
-    produce_report(chat_manager)
     return '最快需要明天。你要幾時來攞?', chat_manager
+  if check_time(text):
+    is_possible, time_str = is_possible_time(text)
+    if is_possible:
+      chat_manager.covid_data['pickup_time'] = time_str
+      produce_report(chat_manager)
+      return '好的，可以', chat_manager
+    else:
+      return '我們六點閂門🙏'
   return get_text(response), chat_manager
   
   

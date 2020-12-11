@@ -11,7 +11,12 @@
     {
       "resetContexts": false,
       "action": "3Covidlandingmessage.3Covidlandingmessage-custom.311Name-custom.3111Amount-custom.31111-custom.311111numberoflocation-custom",
-      "affectedContexts": [],
+      "affectedContexts": [
+        {
+          "name": "3111111correct-followup",
+          "lifespan": 2
+        }
+      ],
       "parameters": [],
       "messages": [
         {

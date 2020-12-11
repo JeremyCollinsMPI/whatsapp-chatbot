@@ -1,22 +1,17 @@
 {
-  "id": "fd242aad-a442-4057-a0f0-274896a4c491",
-  "parentId": "e42cc98c-13e0-414b-919c-893b9a2056e3",
+  "id": "f3cc6675-8a3e-4db8-942d-50e0ab4665f7",
+  "parentId": "fd242aad-a442-4057-a0f0-274896a4c491",
   "rootParentId": "6840c276-ce47-4db2-90d2-645de92a86a5",
-  "name": "3.1.1.1.2.1.1 correct",
+  "name": "3.1.1.1.2.1.1.1 OK",
   "auto": true,
   "contexts": [
-    "311121Address-followup"
+    "3111211correct-followup"
   ],
   "responses": [
     {
       "resetContexts": false,
-      "action": "3Covidlandingmessage.3Covidlandingmessage-custom.311Name-custom.3111Amount-custom.31112-custom.311121Address-custom",
-      "affectedContexts": [
-        {
-          "name": "3111211correct-followup",
-          "lifespan": 2
-        }
-      ],
+      "action": "3Covidlandingmessage.3Covidlandingmessage-custom.311Name-custom.3111Amount-custom.31112-custom.311121Address-custom.3111211correct-custom",
+      "affectedContexts": [],
       "parameters": [],
       "messages": [
         {
@@ -25,7 +20,7 @@
           "textToSpeech": "",
           "lang": "en",
           "speech": [
-            "finished_delivery"
+            "😊"
           ],
           "condition": ""
         },
@@ -47,5 +42,6 @@
   "events": [],
   "conditionalResponses": [],
   "condition": "",
-  "conditionalFollowupEvents": []
+  "conditionalFollowupEvents": [],
+  "endInteraction": true
 }

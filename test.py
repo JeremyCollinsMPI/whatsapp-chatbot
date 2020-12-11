@@ -4,7 +4,8 @@ from process_response import *
 from time import sleep
 from new_flow import *
 from chat_manager import *
-
+from kol import *
+import json
 
 def test1():
   send_message('hello')
@@ -130,7 +131,7 @@ def test21():
 def test22():
   token = get_authorization_token_for_chatdaddy()  
   chats = get_chats(token)
-  json.dump(chats, open('covid_chats.json', 'w', encoding='utf8'), indent=4, ensure_ascii=False)
+  json.dump(chats, open('covid_chats.json', 'w', encoding='utf8', indent=4, ensure_ascii=False))
 
 def test23():
   chat_manager = ChatManager('34508')
@@ -150,7 +151,7 @@ def test24():
 
 def test25():
   chat_manager = ChatManager('447756189127')
-  conversation = ['ARISTA 即驗即知 Covid-19 Antigen測試棒訂購', 'Jeremy Collins', '我要買五個', '送貨', '22 Caine Road, Hong Kong', 'yes']
+  conversation = ['ARISTA 即驗即知 Covid-19 Antigen測試棒訂購', 'Jeremy Collins', '我要買五個', '送貨', '22 Caine Road, Hong Kong', 'yes', 'thanks!']
   for x in conversation:
     response, chat_manager  = process_need_call_api(submit(x), chat_manager)
     print(response)
@@ -162,13 +163,21 @@ def test26():
 
 def test27():
   chat_manager = ChatManager('447756189127')
-  conversation = ['ARISTA 即驗即知 Covid-19 Antigen測試棒訂購', 'Jeremy Collins', '3', '取貨', '1', 'yes']
+  conversation = ['ARISTA 即驗即知 Covid-19 Antigen測試棒訂購', 'Jeremy Collins', '3', '取貨', '1', 'yes', '我可以五點來嗎']
   for x in conversation:
     response, chat_manager  = process_need_call_api(submit(x), chat_manager)
     print(response)
     sleep(2)  
 
-test27()
+def test28():
+  thing = get_inventory_list()
+  json.dump(thing, open('inventory_list.json', 'w', encoding='utf8'), indent=4, ensure_ascii=False)
+
+def test29():
+  chat_manager = ChatManager('85291740469')
+  chat_manager.run()
+  
+test29()
 
 
 

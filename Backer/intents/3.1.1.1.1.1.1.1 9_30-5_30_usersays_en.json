@@ -1,0 +1,25 @@
+[
+  {
+    "id": "a1d15935-7dc5-462e-a4b5-446f29168da9",
+    "data": [
+      {
+        "text": "我可以",
+        "userDefined": false
+      },
+      {
+        "text": "五點",
+        "meta": "@sys.date-time",
+        "alias": "date-time",
+        "userDefined": true
+      },
+      {
+        "text": "來嗎",
+        "userDefined": false
+      }
+    ],
+    "isTemplate": false,
+    "count": 0,
+    "lang": "en",
+    "updated": 0
+  }
+]

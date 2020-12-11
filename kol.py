@@ -1,5 +1,8 @@
 import requests
 
+
+
+
 def get_kol_token(): 
   r = requests.post("https://www.kolpartner.cn/kol-rest//auth/login", data={"username":"adminWendy", "password":"admin123"})
   return r.json()['data']['token']

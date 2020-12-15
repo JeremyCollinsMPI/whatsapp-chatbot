@@ -6,6 +6,9 @@ from new_flow import *
 from chat_manager import *
 from kol import *
 import json
+from use_google_sheet import *
+from secrets import *
+
 
 def test1():
   send_message('hello')
@@ -176,8 +179,20 @@ def test28():
 def test29():
   chat_manager = ChatManager('85291740469')
   chat_manager.run()
+
+
+def test30():
+  '''
+  test writing to/from a google sheet
+  '''
+  x = read_from_google_sheet('12sqCOpDyM2phs4sqakVoJ24JjVGPgNGY0f7NIyixgII')
+  print(x)
+
+def test31():
+  new_covid_chat_manager = NewCovidChatManager()
+  new_covid_chat_manager.run()
   
-test29()
+test31()
 
 
 

@@ -5,3 +5,4 @@ RUN pip install flask
 RUN pip install pandas
 RUN pip install google-cloud-vision
 RUN pip install google-cloud-translate==2.0.0
+RUN pip install --upgrade google-api-python-client google-auth-httplib2 google-auth-oauthlib

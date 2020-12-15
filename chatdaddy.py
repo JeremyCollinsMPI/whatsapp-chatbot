@@ -25,7 +25,23 @@ def find_chat_by_phone_number(phone_number, chats):
     if member['jid'] == phone_number + "@s.whatsapp.net":
       return member
   return None
-  
+ 
+def get_messages_by_jid(jid, token):
+  headers = {"Authorization": "Bearer " + token}
+  r = requests.get('https://api-wa.chatdaddy.tech/messages/' + jid + '?count=20', headers=headers)
+  return r.json()
+
+def download_media_by_jid_and_message_id(jid, message_id, token, filename):
+  '''
+  this should download some media, presumably to whatever download folder is set for whatsapp
+  '''
+  headers = {"Authorization": "Bearer " + token}
+  string = 'https://api-wa.chatdaddy.tech/messages/' + jid + '/' + message_id + '/media'
+  r = requests.get(string, headers=headers)
+  output = open(filename, 'wb')
+  output.write(r.content)
+  output.close()
+
 def find_last_message(chat):
   return chat['messages'][-1]
 
@@ -34,4 +50,5 @@ def last_message_is_from_me(message):
 
 def get_text_of_message_if_not_from_me(message):
   return message['message']['conversation']
+
 

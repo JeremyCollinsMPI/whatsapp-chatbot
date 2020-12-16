@@ -24,7 +24,8 @@ class ChatManager:
     self.phone_number = self.process_phone_number(self.original_phone_number)
     self.order_number = order_number
     self.pickup_locations = {'MK': '旺角', 'TST': '尖沙嘴', 'LAFORD': '勵豐中心'}
-    
+    self.mode = 'testing'
+
   def stop(self):
     self.running = False
    
@@ -81,7 +82,7 @@ class ChatManager:
     print(self.original_phone_number)
     message = self.make_first_message()
     print(message)
-    if self.can_send_message():
+    if self.can_send_message() and not self.mode == 'testing':
       r = send_message(self.phone_number, message, token)
 
   def send_sf_number(self, sf_number):
@@ -90,7 +91,8 @@ class ChatManager:
     print('----')
     print(self.phone_number)
     print(message)
-    r = send_message(self.phone_number, message, token)
+    if not self.mode == 'testing':
+      r = send_message(self.phone_number, message, token)
 
   def see_if_they_have_confirmed(self, text):
     if text == '正確':
@@ -114,7 +116,8 @@ class ChatManager:
         can_confirm = self.see_if_they_have_confirmed(text)
         if can_confirm:
           message = '謝謝！'
-#           r = send_message(self.phone_number, message, token)
+          if not self.mode == 'testing':
+            r = send_message(self.phone_number, message, token)
 
     return can_confirm
 
@@ -132,6 +135,7 @@ class NewCovidChatManager:
     self.delay = 0
     self.sf_numbers_messaged = json.load(open('data/sf_numbers_messaged.json', 'r'))['sf_numbers_messaged']
     self.orders_confirmed = json.load(open('data/orders_confirmed.json', 'r'))['orders_confirmed']
+    self.write_to_files = True
     
   def download_excel(self, message_id, jid):
     result = download_media_by_jid_and_message_id(jid, message_id, self.token, 'data/data.xls')
@@ -186,7 +190,8 @@ class NewCovidChatManager:
       self.chat_managers[number].send_first_message()
       self.numbers_messaged.append([self.process_phone_number(pair[0]), pair[1]])
       sleep(self.delay)
-    json.dump({'numbers_messaged': self.numbers_messaged}, open('data/numbers_messaged.json', 'w'), indent=4)
+    if self.write_to_files:
+      json.dump({'numbers_messaged': self.numbers_messaged}, open('data/numbers_messaged.json', 'w'), indent=4)
   
   def check_product_support_channel(self):
     PRODUCT_SUPPORT = self.PRODUCT_SUPPORT
@@ -233,7 +238,8 @@ class NewCovidChatManager:
         chat_manager = ChatManager(phone_number, order_number, self.token, self.df)
       chat_manager.send_sf_number(sf_number)
       self.sf_numbers_messaged.append([phone_number, order_number, sf_number])
-    json.dump({'sf_numbers_messaged': self.sf_numbers_messaged}, open('data/sf_numbers_messaged.json', 'w'), indent=4)
+    if self.write_to_files:
+      json.dump({'sf_numbers_messaged': self.sf_numbers_messaged}, open('data/sf_numbers_messaged.json', 'w'), indent=4)
 
   def check_chats_for_response_to_first_message(self):
     for item in self.numbers_messaged:
@@ -251,7 +257,8 @@ class NewCovidChatManager:
 #           values = read_from_google_sheet(SPREADSHEET_ID, value_range='A1:AA1000',make_into_df=False)
 #           print(values)
 #           self.df = read_from_google_sheet(SPREADSHEET_ID, value_range='A1:AA1000')
-    json.dump({'orders_confirmed': self.orders_confirmed}, open('data/orders_confirmed.json', 'w'), indent=4)        
+    if self.write_to_files:
+      json.dump({'orders_confirmed': self.orders_confirmed}, open('data/orders_confirmed.json', 'w'), indent=4)        
   def stop(self):
     self.running = False
   

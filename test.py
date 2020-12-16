@@ -191,8 +191,16 @@ def test30():
 def test31():
   new_covid_chat_manager = NewCovidChatManager()
   new_covid_chat_manager.run()
-  
-test31()
+
+def test32():
+  x = read_from_google_sheet('1KJn6tZ39o4lQNGZgAqGZy9HjVFyjUjGFcGrPE8u8Ftg', make_into_df=False)
+  print(x) 
+
+def test33():
+  new_covid_chat_manager = NewCovidChatManager()
+  new_covid_chat_manager.run()
+
+test33()
 
 
 

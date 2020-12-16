@@ -84,6 +84,42 @@ class ChatManager:
     if self.can_send_message():
       r = send_message(self.phone_number, message, token)
 
+  def send_sf_number(self, sf_number):
+    token =self.token
+    message = '你的SF號碼是' + sf_number
+    print('----')
+    print(self.phone_number)
+    print(message)
+    r = send_message(self.phone_number, message, token)
+
+  def see_if_they_have_confirmed(self, text):
+    if text == '正確':
+      return True
+    else:
+      return False
+
+  def check_response_to_first_message(self):
+    token = self.token
+    chats = get_chats(token)
+    chat = find_chat_by_phone_number(self.phone_number, chats)
+    can_confirm = False
+    if not chat == None:
+      last_message = find_last_message(chat)
+      print('Last message: ', last_message)
+      print('Here')
+      if not last_message_is_from_me(last_message):
+        print('Received text')
+        text = get_text_of_message_if_not_from_me(last_message)
+        print(text)
+        can_confirm = self.see_if_they_have_confirmed(text)
+        if can_confirm:
+          message = '謝謝！'
+#           r = send_message(self.phone_number, message, token)
+
+    return can_confirm
+
+    
+
 class NewCovidChatManager:
   def __init__(self):
     self.token = get_authorization_token_for_chatdaddy()
@@ -93,7 +129,9 @@ class NewCovidChatManager:
     self.running = False
     self.numbers_messaged = json.load(open('data/numbers_messaged.json', 'r'))['numbers_messaged']
     self.df = read_from_google_sheet(SPREADSHEET_ID, value_range='A1:AA1000') 
-    self.delay = 6
+    self.delay = 0
+    self.sf_numbers_messaged = json.load(open('data/sf_numbers_messaged.json', 'r'))['sf_numbers_messaged']
+    self.orders_confirmed = json.load(open('data/orders_confirmed.json', 'r'))['orders_confirmed']
     
   def download_excel(self, message_id, jid):
     result = download_media_by_jid_and_message_id(jid, message_id, self.token, 'data/data.xls')
@@ -159,23 +197,89 @@ class NewCovidChatManager:
     self.download_any_not_downloaded_excel_sheet(messages)
 #     self.update_google_sheet()
 
+  def is_sf_number(self, sf_number):
+    if 'SF' in sf_number:
+      return True
+    else:
+      return False
+
   def check_google_sheet_for_updated_sf_numbers(self):
-    return None
-  
+    self.df = read_from_google_sheet(SPREADSHEET_ID, value_range='A1:AA1000')   
+    df = self.df 
+    result = []
+    for index, row in df.iterrows():
+      sf_number = row['SF NO.']
+      phone_number = row['客人電話']
+      order_number = row['客人編號']
+      if not sf_number == None and not phone_number == None:
+        if len(sf_number) > 3 and len(phone_number) >= 8:
+          if self.is_sf_number(sf_number):
+            sf_number = sf_number.replace(' ', '')
+            sf_number = sf_number.upper()
+            sf_number = sf_number.split('(')[0]
+            if not [phone_number, order_number, sf_number] in self.sf_numbers_messaged:
+              result.append([phone_number, order_number, sf_number])
+    return result
+
+  def send_any_new_sf_numbers(self):
+    new_sf_numbers = self.check_google_sheet_for_updated_sf_numbers()
+    for item in new_sf_numbers:
+      phone_number = item[0]
+      order_number = item[1]
+      sf_number = item[2]
+      try:
+        chat_manager = self.chat_managers[phone_number]
+      except:
+        chat_manager = ChatManager(phone_number, order_number, self.token, self.df)
+      chat_manager.send_sf_number(sf_number)
+      self.sf_numbers_messaged.append([phone_number, order_number, sf_number])
+    json.dump({'sf_numbers_messaged': self.sf_numbers_messaged}, open('data/sf_numbers_messaged.json', 'w'), indent=4)
+
+  def check_chats_for_response_to_first_message(self):
+    for item in self.numbers_messaged:
+      phone_number = item[0]
+      order_number = item[1]
+      print(item)
+      if not item[1] in self.orders_confirmed:
+        try:
+          chat_manager = self.chat_managers[item[0]]
+        except:
+          chat_manager = ChatManager(phone_number, order_number, self.token, self.df)
+        can_confirm = chat_manager.check_response_to_first_message()
+        if can_confirm:
+          self.orders_confirmed.append(order_number)        
+#           values = read_from_google_sheet(SPREADSHEET_ID, value_range='A1:AA1000',make_into_df=False)
+#           print(values)
+#           self.df = read_from_google_sheet(SPREADSHEET_ID, value_range='A1:AA1000')
+    json.dump({'orders_confirmed': self.orders_confirmed}, open('data/orders_confirmed.json', 'w'), indent=4)        
   def stop(self):
     self.running = False
   
+#   def run(self):
+#     self.running = True
+#     while self.running:
+#       self.check_product_support_channel()
+#       self.message_any_number_with_a_new_order()
+#       sleep(300)
+#       self.check_google_sheet_for_updated_sf_numbers()
+    
   def run(self):
     self.running = True
     while self.running:
-      self.check_product_support_channel()
+      print('Messaging new orders')
       self.message_any_number_with_a_new_order()
-      sleep(300)
-      self.check_google_sheet_for_updated_sf_numbers()
-    
-  def run(self):
-    self.message_any_number_with_a_new_order()
+      print('Checking chats for responses to first message')
+      self.check_chats_for_response_to_first_message()
+      print('Messaging new SF numbers')
+      self.send_any_new_sf_numbers()
+      sleep(5)
+      print('Finished')
 
     
-    
-    
+  '''
+  make a function for syncing the data with the google sheet
+  '''
+      
+
+
+

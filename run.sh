@@ -1,1 +1,1 @@
-docker run -it --rm -v $PWD:/src -p 80:80 --name chatbot jeremycollinsmpi/chatbot python api.py
+docker run -it --rm -v $PWD:/src --name chatbot jeremycollinsmpi/chatbot python main.py

@@ -8,7 +8,7 @@ import pandas as pd
 
 
 
-def read_from_google_sheet(sheet_id, value_range='A1:AA1000'):
+def read_from_google_sheet(sheet_id, value_range='A1:AA1000', make_into_df=True):
     SCOPES = ['https://www.googleapis.com/auth/spreadsheets']
 
     """Shows basic usage of the Sheets API.
@@ -45,6 +45,9 @@ def read_from_google_sheet(sheet_id, value_range='A1:AA1000'):
         print('No data found.')
         return None
     else:
-        df=pd.DataFrame(values[1:], columns=values[0])
-        return df
+        if make_into_df:
+            df=pd.DataFrame(values[1:], columns=values[0] + ['ignore'])
+            return df
+        else:
+            return values
     

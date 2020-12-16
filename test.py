@@ -200,7 +200,11 @@ def test33():
   new_covid_chat_manager = NewCovidChatManager()
   new_covid_chat_manager.run()
 
-test33()
+def test34():
+  whatsapp_connected, token = check_whatsapp_is_connected()
+  print(whatsapp_connected)
+  print(token)
+test34()
 
 
 

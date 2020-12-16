@@ -7,6 +7,9 @@ import os
 import json
 from use_google_sheet import *
 from secrets import *
+import logging
+
+logging.basicConfig(filename='chat_manager.log', level=logging.DEBUG)
 
 class ChatManager:
 
@@ -24,7 +27,7 @@ class ChatManager:
     self.phone_number = self.process_phone_number(self.original_phone_number)
     self.order_number = order_number
     self.pickup_locations = {'MK': '旺角', 'TST': '尖沙嘴', 'LAFORD': '勵豐中心'}
-    self.mode = 'testing'
+    self.mode = 'production'
 
   def stop(self):
     self.running = False
@@ -38,6 +41,9 @@ class ChatManager:
       print('*****')
       print(self.original_phone_number)
       print(pickup_method)
+      logging.debug('*****')
+      logging.debug(self.original_phone_number)
+      logging.debug(pickup_method)
       address = self.pickup_locations[pickup_method.upper()]
       address_type = "取貨地址"
     else:
@@ -80,8 +86,11 @@ class ChatManager:
     token =self.token
     print(self.phone_number)
     print(self.original_phone_number)
+    logging.debug(self.phone_number)
+    logging.debug(self.original_phone_number)
     message = self.make_first_message()
     print(message)
+    logging.debug(message)
     if self.can_send_message() and not self.mode == 'testing':
       r = send_message(self.phone_number, message, token)
 
@@ -91,6 +100,9 @@ class ChatManager:
     print('----')
     print(self.phone_number)
     print(message)
+    logging.debug('----')
+    logging.debug(self.phone_number)
+    logging.debug(message)
     if not self.mode == 'testing':
       r = send_message(self.phone_number, message, token)
 
@@ -125,17 +137,19 @@ class ChatManager:
 
 class NewCovidChatManager:
   def __init__(self):
-    self.token = get_authorization_token_for_chatdaddy()
+    self.token = ''
     self.excel_directory = './data'
     self.chat_managers = {}
     self.PRODUCT_SUPPORT = "85291740469-1606794850@g.us"
     self.running = False
     self.numbers_messaged = json.load(open('data/numbers_messaged.json', 'r'))['numbers_messaged']
     self.df = read_from_google_sheet(SPREADSHEET_ID, value_range='A1:AA1000') 
-    self.delay = 0
+    self.delay = 300
+    self.delay2 = 10
     self.sf_numbers_messaged = json.load(open('data/sf_numbers_messaged.json', 'r'))['sf_numbers_messaged']
     self.orders_confirmed = json.load(open('data/orders_confirmed.json', 'r'))['orders_confirmed']
     self.write_to_files = True
+    self.mode = 'production'
     
   def download_excel(self, message_id, jid):
     result = download_media_by_jid_and_message_id(jid, message_id, self.token, 'data/data.xls')
@@ -187,9 +201,12 @@ class NewCovidChatManager:
       number = pair[0]
       order_number = pair[1]
       self.chat_managers[number] = ChatManager(number, order_number, self.token, self.df)
-      self.chat_managers[number].send_first_message()
+      try:
+        self.chat_managers[number].send_first_message()
+      except Exception as e:
+        logging.exception('', exc_info=e)
       self.numbers_messaged.append([self.process_phone_number(pair[0]), pair[1]])
-      sleep(self.delay)
+      sleep(self.delay2)
     if self.write_to_files:
       json.dump({'numbers_messaged': self.numbers_messaged}, open('data/numbers_messaged.json', 'w'), indent=4)
   
@@ -269,17 +286,26 @@ class NewCovidChatManager:
 #       self.message_any_number_with_a_new_order()
 #       sleep(300)
 #       self.check_google_sheet_for_updated_sf_numbers()
+ 
+ 
+
     
   def run(self):
     self.running = True
     while self.running:
+      whatsapp_connected, self.token = check_whatsapp_is_connected()
+      if not whatsapp_connected and not self.mode == 'testing':
+        print('Whatsapp not connected')
+        logging.debug('Whatsapp not connected')
+        sleep(600)
+        continue
       print('Messaging new orders')
       self.message_any_number_with_a_new_order()
-      print('Checking chats for responses to first message')
-      self.check_chats_for_response_to_first_message()
+#       print('Checking chats for responses to first message')
+#       self.check_chats_for_response_to_first_message()
       print('Messaging new SF numbers')
       self.send_any_new_sf_numbers()
-      sleep(5)
+      sleep(self.delay)
       print('Finished')
 
     
@@ -288,5 +314,21 @@ class NewCovidChatManager:
   '''
       
 
-
+  '''
+  
+  steps for deploying
+  
+  set it to testing mode
+  add a row in google sheets to check it is fine - done, although issue with blank message
+  set it to 'production' mode
+  connect to whatsapp
+  add a row in google sheets to check it is fine - done
+  set chatmanager mode to production -done
+  add a row in google sheets to check it is fine to see if it sends a message -done 
+  repeat but setting run.sh to -d rather than -it  - done
+  repeat but with write to file = true.  
+  then check it doesn't send the message again  - done
+  set self.delay = 120  - done
+  set self.delay = 300  - done
+  '''
 

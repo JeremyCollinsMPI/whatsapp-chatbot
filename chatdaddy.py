@@ -51,4 +51,8 @@ def last_message_is_from_me(message):
 def get_text_of_message_if_not_from_me(message):
   return message['message']['conversation']
 
-
+def check_whatsapp_is_connected():
+  token = get_authorization_token_for_chatdaddy()
+  headers = {"Authorization": "Bearer " + token}
+  r = requests.get('https://api-wa.chatdaddy.tech/', headers=headers)
+  return r.json()['connections']['phone'], token

@@ -9,7 +9,7 @@ from use_google_sheet import *
 from secrets import *
 import logging
 
-logging.basicConfig(filename='chat_manager.log', level=logging.DEBUG)
+logging.basicConfig(filename='chat_manager.log', level=logging.CRITICAL)
 
 class ChatManager:
 
@@ -41,9 +41,9 @@ class ChatManager:
       print('*****')
       print(self.original_phone_number)
       print(pickup_method)
-      logging.debug('*****')
-      logging.debug(self.original_phone_number)
-      logging.debug(pickup_method)
+      logging.critical('*****')
+      logging.critical(self.original_phone_number)
+      logging.critical(pickup_method)
       address = self.pickup_locations[pickup_method.upper()]
       address_type = "取貨地址"
     else:
@@ -86,11 +86,11 @@ class ChatManager:
     token =self.token
     print(self.phone_number)
     print(self.original_phone_number)
-    logging.debug(self.phone_number)
-    logging.debug(self.original_phone_number)
+    logging.critical(self.phone_number)
+    logging.critical(self.original_phone_number)
     message = self.make_first_message()
     print(message)
-    logging.debug(message)
+    logging.critical(message)
     if self.can_send_message() and not self.mode == 'testing':
       r = send_message(self.phone_number, message, token)
 
@@ -100,9 +100,9 @@ class ChatManager:
     print('----')
     print(self.phone_number)
     print(message)
-    logging.debug('----')
-    logging.debug(self.phone_number)
-    logging.debug(message)
+    logging.critical('----')
+    logging.critical(self.phone_number)
+    logging.critical(message)
     if not self.mode == 'testing':
       r = send_message(self.phone_number, message, token)
 
@@ -293,20 +293,25 @@ class NewCovidChatManager:
   def run(self):
     self.running = True
     while self.running:
-      whatsapp_connected, self.token = check_whatsapp_is_connected()
-      if not whatsapp_connected and not self.mode == 'testing':
-        print('Whatsapp not connected')
-        logging.debug('Whatsapp not connected')
-        sleep(600)
-        continue
-      print('Messaging new orders')
-      self.message_any_number_with_a_new_order()
-#       print('Checking chats for responses to first message')
-#       self.check_chats_for_response_to_first_message()
-      print('Messaging new SF numbers')
-      self.send_any_new_sf_numbers()
-      sleep(self.delay)
-      print('Finished')
+      try:
+        whatsapp_connected, self.token = check_whatsapp_is_connected()
+        if not whatsapp_connected and not self.mode == 'testing':
+          print('Whatsapp not connected')
+          logging.critical('Whatsapp not connected')
+          sleep(600)
+          continue
+        print('Messaging new orders')
+        logging.critical('Messaging new orders')
+        self.message_any_number_with_a_new_order()
+#         print('Checking chats for responses to first message')
+#         self.check_chats_for_response_to_first_message()
+        print('Messaging new SF numbers')
+        self.send_any_new_sf_numbers()
+        sleep(self.delay)
+        print('Finished')
+        logging.critical('Finished')
+      except Exception as e:
+        logging.critical(repr(e))
 
     
   '''

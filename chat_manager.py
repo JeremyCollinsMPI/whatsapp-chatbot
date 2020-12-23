@@ -93,6 +93,7 @@ class ChatManager:
     logging.critical(message)
     if self.can_send_message() and not self.mode == 'testing':
       r = send_message(self.phone_number, message, token)
+    return r
 
   def send_sf_number(self, sf_number):
     token =self.token
@@ -105,6 +106,7 @@ class ChatManager:
     logging.critical(message)
     if not self.mode == 'testing':
       r = send_message(self.phone_number, message, token)
+    return r
 
   def see_if_they_have_confirmed(self, text):
     if text == '正確':
@@ -187,12 +189,20 @@ class NewCovidChatManager:
     df = self.df 
     numbers = df['客人電話']
     orders = df['客人編號']
+    names = df['客人姓名']
+    amounts = df['貨數量']
+    methods = df['取貨方式']
+    
     result = []
-    for pair in zip(numbers, orders):
+    for pair in zip(numbers, orders, names, amounts, methods):
       if not pair[0] == None:
         if not len(pair[0]) < 8:
           if not [self.process_phone_number(pair[0]), pair[1]] in self.numbers_messaged:
-            result.append([pair[0], pair[1]])
+            print(pair[2])
+            print(pair[3])
+            if not pair[2] == None and not pair[3] == None and not pair[2] == '' and not pair[3] == '':
+              if not pair[4] == None and not pair[4] == '':
+                result.append([pair[0], pair[1]])
     return result
      
   def message_any_number_with_a_new_order(self):
@@ -202,7 +212,9 @@ class NewCovidChatManager:
       order_number = pair[1]
       self.chat_managers[number] = ChatManager(number, order_number, self.token, self.df)
       try:
-        self.chat_managers[number].send_first_message()
+        r = self.chat_managers[number].send_first_message()
+        logging.critical(r)
+        logging.critical(r.json())
       except Exception as e:
         logging.exception('', exc_info=e)
       self.numbers_messaged.append([self.process_phone_number(pair[0]), pair[1]])
@@ -253,7 +265,9 @@ class NewCovidChatManager:
         chat_manager = self.chat_managers[phone_number]
       except:
         chat_manager = ChatManager(phone_number, order_number, self.token, self.df)
-      chat_manager.send_sf_number(sf_number)
+      r = chat_manager.send_sf_number(sf_number)
+      logging.critical(r)
+      logging.critical(r.json())
       self.sf_numbers_messaged.append([phone_number, order_number, sf_number])
     if self.write_to_files:
       json.dump({'sf_numbers_messaged': self.sf_numbers_messaged}, open('data/sf_numbers_messaged.json', 'w'), indent=4)

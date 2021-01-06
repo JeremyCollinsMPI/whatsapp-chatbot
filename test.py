@@ -204,7 +204,15 @@ def test34():
   whatsapp_connected, token = check_whatsapp_is_connected()
   print(whatsapp_connected)
   print(token)
-test34()
+
+def test35():
+  token = get_authorization_token_for_chatdaddy()
+  r = send_message('447756189127', 'test', token)
+  print('hello')
+  print(r.json())
+
+
+test35()
 
 
 

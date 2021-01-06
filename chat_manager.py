@@ -217,7 +217,12 @@ class NewCovidChatManager:
         logging.critical(r.json())
       except Exception as e:
         logging.exception('', exc_info=e)
-      self.numbers_messaged.append([self.process_phone_number(pair[0]), pair[1]])
+      try:
+        code = r.json()['code']
+      except:
+        code = 'none'
+      if not code == 401:
+        self.numbers_messaged.append([self.process_phone_number(pair[0]), pair[1]])
       sleep(self.delay2)
     if self.write_to_files:
       json.dump({'numbers_messaged': self.numbers_messaged}, open('data/numbers_messaged.json', 'w'), indent=4)
@@ -268,7 +273,12 @@ class NewCovidChatManager:
       r = chat_manager.send_sf_number(sf_number)
       logging.critical(r)
       logging.critical(r.json())
-      self.sf_numbers_messaged.append([phone_number, order_number, sf_number])
+      try:
+        code = r.json()['code']
+      except:
+        code = 'none'
+      if not code == 401:
+        self.sf_numbers_messaged.append([phone_number, order_number, sf_number])
     if self.write_to_files:
       json.dump({'sf_numbers_messaged': self.sf_numbers_messaged}, open('data/sf_numbers_messaged.json', 'w'), indent=4)
 

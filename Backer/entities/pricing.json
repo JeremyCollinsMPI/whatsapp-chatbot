@@ -1,9 +1,0 @@
-{
-  "id": "a0239f6b-32fa-40fb-be4f-540600e149b5",
-  "name": "pricing",
-  "isOverridable": true,
-  "isEnum": true,
-  "isRegexp": false,
-  "automatedExpansion": false,
-  "allowFuzzyExtraction": true
-}

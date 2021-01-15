@@ -6,6 +6,7 @@ from new_flow import *
 from chat_manager import *
 from kol import *
 import json
+from prepare_product_descriptions import *
 
 def test1():
   send_message('hello')
@@ -176,8 +177,84 @@ def test28():
 def test29():
   chat_manager = ChatManager('85291740469')
   chat_manager.run()
+
+def test30():
+  chat_manager = ChatManager('447756189127')
+  conversation = ['ARISTA 即驗即知 Covid-19 Antigen測試棒訂購', 'Jeremy Collins', '3', '取貨', '1', 'yes', '我可以五點來嗎']
+  for x in conversation:
+    response, chat_manager  = process_need_call_api(submit(x), chat_manager)
+    print(response)
+    sleep(2)
+
+def test31():
+  response = process_need_call_api(submit('你有冇merries呢個牌子？'))
+  print(response)  
+ 
+def test32():
+  chat_manager = ChatManager('447756189127')
+  chat_manager.run()
+
+def test33():
+  chat_manager = ChatManager('447756189127')
+  chat_manager.send_image('http://homepages.cae.wisc.edu/~ece533/images/airplane.png')
+#   chat_manager.send_test_message()
+
+def test34():
+  chat_manager = ChatManager('447756189127')
+  chat_manager.run()
+
+def test35():
+  print(recommendation_flow('d'))
   
-test29()
+def test36():
+  '''
+  now going to use backer in the recommendation flow
+  
+  '''
+  print(recommendation_flow('d'))
+
+def test37():
+  '''
+  now going to use backer in the recommendation flow
+  
+  '''
+  print(recommendation_flow('Do you have anything for oily skin?'))
+
+def test38():
+  chat_manager = ChatManager('447756189127')
+  chat_manager.run()
+
+'''
+next steps
+
+need to deploy backer on google cloud
+
+need to put the chatbot on the server
+
+need to reconcile this version of the chatbot with the covid order chatbot
+
+need to get the inventory of products from the website and get descriptions for at least some of them
+
+need to have a pipeline of finding the image url to send given a product name or id.
+
+
+
+
+'''
+
+def test39():
+  inventory_list = get_entire_inventory_list()
+
+def test40():
+  chat_manager = ChatManager('447756189127')
+  chat_manager.run()
+
+def test41():
+  prepare_product_descriptions()
+
+
+
+test40()
 
 
 

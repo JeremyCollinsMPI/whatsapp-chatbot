@@ -1,9 +1,0 @@
-{
-  "id": "39db4374-1c72-4cd0-8060-e8ab3bdbc4ed",
-  "name": "brand",
-  "isOverridable": true,
-  "isEnum": false,
-  "isRegexp": false,
-  "automatedExpansion": false,
-  "allowFuzzyExtraction": false
-}

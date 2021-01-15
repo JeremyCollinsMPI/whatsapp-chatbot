@@ -35,3 +35,18 @@ def last_message_is_from_me(message):
 def get_text_of_message_if_not_from_me(message):
   return message['message']['conversation']
 
+def send_message_with_image(phone_number, url, token):
+  if '.png' in url.lower():
+    mimetype = 'image/png'
+  if '.jpg' in url.lower():
+    mimetype = 'image/jpeg'
+  print(url)
+  body = {
+  "jid": phone_number + "@s.whatsapp.net",
+  "image": {"url": url, "mimetype": mimetype, "name": "test"}
+  }
+  headers = {"Authorization": "Bearer " + token}
+  r = requests.post('https://api-wa.chatdaddy.tech/messages/' + phone_number + '@s.whatsapp.net', headers=headers, json=body)
+  print(body)
+  return r
+  

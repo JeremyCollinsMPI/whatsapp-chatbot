@@ -35,6 +35,12 @@ def last_message_is_from_me(message):
 def get_text_of_message_if_not_from_me(message):
   return message['message']['conversation']
 
+def check_whatsapp_is_connected():
+  token = get_authorization_token_for_chatdaddy()
+  headers = {"Authorization": "Bearer " + token}
+  r = requests.get('https://api-wa.chatdaddy.tech/', headers=headers)
+  return r.json()['connections']['phone'], token
+
 def send_message_with_image(phone_number, url, token):
   if '.png' in url.lower():
     mimetype = 'image/png'
@@ -50,3 +56,18 @@ def send_message_with_image(phone_number, url, token):
   print(body)
   return r
   
+def get_messages_by_jid(jid, token):
+  headers = {"Authorization": "Bearer " + token}
+  r = requests.get('https://api-wa.chatdaddy.tech/messages/' + jid + '?count=20', headers=headers)
+  return r.json()
+
+def download_media_by_jid_and_message_id(jid, message_id, token, filename):
+  '''
+  this should download some media, presumably to whatever download folder is set for whatsapp
+  '''
+  headers = {"Authorization": "Bearer " + token}
+  string = 'https://api-wa.chatdaddy.tech/messages/' + jid + '/' + message_id + '/media'
+  r = requests.get(string, headers=headers)
+  output = open(filename, 'wb')
+  output.write(r.content)
+  output.close()

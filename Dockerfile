@@ -7,3 +7,4 @@ RUN pip install google-cloud-vision
 RUN pip install google-cloud-translate==2.0.0
 RUN pip install txtai
 RUN pip install google-search-results
+RUN pip install --upgrade google-api-python-client google-auth-httplib2 google-auth-oauthlib

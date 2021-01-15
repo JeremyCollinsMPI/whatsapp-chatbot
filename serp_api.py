@@ -1,4 +1,5 @@
 from serpapi import GoogleSearch
+from secrets import serp_api_key
 
 params = {
   "api_key": serp_api_key,

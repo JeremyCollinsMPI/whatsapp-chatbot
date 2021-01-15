@@ -7,6 +7,8 @@ from chat_manager import *
 from kol import *
 import json
 from prepare_product_descriptions import *
+from use_google_sheet import *
+from secrets import *
 
 def test1():
   send_message('hello')
@@ -252,9 +254,41 @@ def test40():
 def test41():
   prepare_product_descriptions()
 
+def test42():
+  '''
+  test writing to/from a google sheet
+  '''
+  x = read_from_google_sheet('12sqCOpDyM2phs4sqakVoJ24JjVGPgNGY0f7NIyixgII')
+  print(x)
 
+def test43():
+  new_covid_chat_manager = NewCovidChatManager()
+  new_covid_chat_manager.run()
 
-test40()
+def test44():
+  x = read_from_google_sheet('1KJn6tZ39o4lQNGZgAqGZy9HjVFyjUjGFcGrPE8u8Ftg', make_into_df=False)
+  print(x) 
+
+def test45():
+  new_covid_chat_manager = NewCovidChatManager()
+  new_covid_chat_manager.run()
+
+def test46():
+  whatsapp_connected, token = check_whatsapp_is_connected()
+  print(whatsapp_connected)
+  print(token)
+
+def test47():
+  token = get_authorization_token_for_chatdaddy()
+  r = send_message('447756189127', 'test', token)
+  print('hello')
+  print(r.json())
+
+def test48():
+  chat_manager = ChatManager('447756189127')
+  chat_manager.run()
+  
+test48()
 
 
 

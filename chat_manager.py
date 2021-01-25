@@ -50,8 +50,14 @@ class ChatManager:
       address_type = "收件地址"
       address = row['取貨地址'].values[0]
     amount = row['貨數量'].values[0]
+    three_in_one_amount = row['三合一貨數量'].values[0]
     order_id = row['客人編號'].values[0]
-    message =  "你好,我們是STAY GOLD😊\n\n已收到你的訂單\n\n產品名稱: Arista 即驗即知「新冠病毒」快速測試棒\n\n數量: " + amount + "\n\n收件人: " + name + "\n\n" + address_type + ": " + address + "\n\n訂單編號:" + order_id + "\n請問資料正確嘛?😊"
+    message =  "你好,我們是STAY GOLD😊\n\n已收到你的訂單\n\n"
+    if not amount == '':
+      message = message + "產品名稱: Arista 即驗即知「新冠病毒」快速測試棒" + "\n\n數量: " + str(amount) + "\n\n"
+    if not three_in_one_amount == '':
+      message = message + "產品名稱: 升級版ARISTA即驗即知 三合一快速測試棒" + "\n\n數量: " + str(three_in_one_amount) +  "\n\n"  
+    message = message + "收件人: " + name + "\n\n" + address_type + ": " + address + "\n\n訂單編號:" + order_id + "\n請問資料正確嘛?😊"
     return message
 
   def can_send_message(self):
@@ -91,6 +97,7 @@ class ChatManager:
     message = self.make_first_message()
     print(message)
     logging.critical(message)
+    r = 'none'
     if self.can_send_message() and not self.mode == 'testing':
       r = send_message(self.phone_number, message, token)
     return r
@@ -104,6 +111,7 @@ class ChatManager:
     logging.critical('----')
     logging.critical(self.phone_number)
     logging.critical(message)
+    r = 'none'
     if not self.mode == 'testing':
       r = send_message(self.phone_number, message, token)
     return r
@@ -145,7 +153,7 @@ class NewCovidChatManager:
     self.PRODUCT_SUPPORT = "85291740469-1606794850@g.us"
     self.running = False
     self.numbers_messaged = json.load(open('data/numbers_messaged.json', 'r'))['numbers_messaged']
-    self.df = read_from_google_sheet(SPREADSHEET_ID, value_range='A1:AA1000') 
+    self.df = read_from_google_sheet(SPREADSHEET_ID, value_range='A1:AA1999') 
     self.delay = 300
     self.delay2 = 10
     self.sf_numbers_messaged = json.load(open('data/sf_numbers_messaged.json', 'r'))['sf_numbers_messaged']
@@ -185,28 +193,33 @@ class NewCovidChatManager:
     return x
     
   def find_numbers_with_new_orders(self):
-    self.df = read_from_google_sheet(SPREADSHEET_ID, value_range='A1:AA1000')   
+    self.df = read_from_google_sheet(SPREADSHEET_ID, value_range='A1:AA1999')   
     df = self.df 
     numbers = df['客人電話']
     orders = df['客人編號']
     names = df['客人姓名']
     amounts = df['貨數量']
     methods = df['取貨方式']
+    three_in_one_amounts = df['三合一貨數量']
     
     result = []
-    for pair in zip(numbers, orders, names, amounts, methods):
+    print('****')
+    for pair in zip(numbers, orders, names, amounts, methods, three_in_one_amounts):
       if not pair[0] == None:
-        if not len(pair[0]) < 8:
+        if not len(pair[0]) < 8:         
           if not [self.process_phone_number(pair[0]), pair[1]] in self.numbers_messaged:
             print(pair[2])
             print(pair[3])
-            if not pair[2] == None and not pair[3] == None and not pair[2] == '' and not pair[3] == '':
-              if not pair[4] == None and not pair[4] == '':
-                result.append([pair[0], pair[1]])
+            print([self.process_phone_number(pair[0]), pair[1]])
+            if not pair[2] == None and not pair[3] == None and not pair[2] == '': 
+              if not pair[3] == '' or not pair[5] == '':
+                if not pair[4] == None and not pair[4] == '':
+                  result.append([pair[0], pair[1]])
     return result
      
   def message_any_number_with_a_new_order(self):
     numbers_with_new_orders = self.find_numbers_with_new_orders()
+    print(numbers_with_new_orders)
     for pair in numbers_with_new_orders:
       number = pair[0]
       order_number = pair[1]
@@ -214,15 +227,22 @@ class NewCovidChatManager:
       try:
         r = self.chat_managers[number].send_first_message()
         logging.critical(r)
-        logging.critical(r.json())
       except Exception as e:
         logging.exception('', exc_info=e)
+ 
       try:
         code = r.json()['code']
       except:
         code = 'none'
+      if self.mode == 'testing':
+        print('right')
+        code = 200
+      print('FUCCKKKK')
+      print(code)
       if not code == 401:
+        print('YES')
         self.numbers_messaged.append([self.process_phone_number(pair[0]), pair[1]])
+        print(self.numbers_messaged)
       sleep(self.delay2)
     if self.write_to_files:
       json.dump({'numbers_messaged': self.numbers_messaged}, open('data/numbers_messaged.json', 'w'), indent=4)
@@ -243,7 +263,7 @@ class NewCovidChatManager:
       return False
 
   def check_google_sheet_for_updated_sf_numbers(self):
-    self.df = read_from_google_sheet(SPREADSHEET_ID, value_range='A1:AA1000')   
+    self.df = read_from_google_sheet(SPREADSHEET_ID, value_range='A1:AA1999')   
     df = self.df 
     result = []
     for index, row in df.iterrows():
@@ -262,6 +282,7 @@ class NewCovidChatManager:
 
   def send_any_new_sf_numbers(self):
     new_sf_numbers = self.check_google_sheet_for_updated_sf_numbers()
+    print(new_sf_numbers)
     for item in new_sf_numbers:
       phone_number = item[0]
       order_number = item[1]
@@ -272,14 +293,18 @@ class NewCovidChatManager:
         chat_manager = ChatManager(phone_number, order_number, self.token, self.df)
       r = chat_manager.send_sf_number(sf_number)
       logging.critical(r)
-      logging.critical(r.json())
       try:
         code = r.json()['code']
       except:
         code = 'none'
+      if self.mode == 'testing':
+        code = 200
       if not code == 401:
+        print('YES')
         self.sf_numbers_messaged.append([phone_number, order_number, sf_number])
+        print(self.sf_numbers_messaged)
     if self.write_to_files:
+      print('WRITING')
       json.dump({'sf_numbers_messaged': self.sf_numbers_messaged}, open('data/sf_numbers_messaged.json', 'w'), indent=4)
 
   def check_chats_for_response_to_first_message(self):

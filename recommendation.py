@@ -1,5 +1,7 @@
 from backer.example_flows import *
 import json
+import os
+from translation import translate
 
 def load_product_to_image_dictionary():
   product_to_image_dictionary = json.load(open('product_to_image_dictionary.json', 'r'))
@@ -18,19 +20,53 @@ def load_product_descriptions_and_names():
         product_names.append(dict['name'])  
   return product_descriptions, product_names
 
+def load_product_name_translations(product_names):
+  if 'product_name_translations.json' in os.listdir('.'):
+    return json.load(open('product_name_translations.json', 'r'))
+  product_name_translations = {}
+  for product_name in product_names:
+    product_name_translations[product_name] = translate(product_name)
+  json.dump(product_name_translations, open('product_name_translations.json', 'w', encoding='utf8'), indent=4, ensure_ascii=False)
+
+def invert_dictionary(my_map):
+  inv_map = {v: k for k, v in my_map.items()}
+  return inv_map
 
 def recommendation_flow(text):
   product_descriptions, product_names = load_product_descriptions_and_names()
+  product_name_translations = load_product_name_translations(product_names)
+  product_name_translations_reversed = invert_dictionary(product_name_translations)
   product_to_image_dictionary = load_product_to_image_dictionary()
   query = text
   print(product_descriptions)
   print(product_names)
-  text_response, product = find_most_relevant_products(query, product_names, product_descriptions, use_api=True)
-  image = product_to_image_dictionary[product]
-  response = [{'type': 'text', 'text': text_response}, {'type': 'image', 'url': image}]
+  text_response, product = find_most_relevant_products(query, product_names, product_descriptions, use_api=True,
+  just_use_names=False, product_name_translations=product_name_translations, product_name_translations_reversed=product_name_translations_reversed)
+  
+  response = [{'type': 'text', 'text': text_response}]
+  try:
+    image = product_to_image_dictionary[product]
+    response.append({'type': 'image', 'url': image})
+  except:
+    pass
   return response
   
 
+'''
+sentence in english is sent
+
+current product names are in chinese
+
+so need to translate the product names too
+
+
+they also wanted to use a fact sheet
+
+could also be good for me to able to manually configure what products are returned given the query
+
+
+
+'''
   
   
   

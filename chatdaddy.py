@@ -1,5 +1,10 @@
 import requests
 
+'''
+chatdaddy documentation:
+https://api-wa.chatdaddy.tech/docs/#/
+'''
+
 def get_authorization_token_for_chatdaddy():
   body = {"username": "robotdata.ai",
   "password": "P@ssw0rd"}

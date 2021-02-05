@@ -19,9 +19,9 @@ def find_description(name, id):
 
 def prepare_product_descriptions():
   product_to_image_dictionary = {}
-  inventory_list = get_entire_inventory_list()[30:100]
-  if not 'google_results' in os.listdir('.'):
-    os.mkdir('google_results')
+  inventory_list = get_entire_inventory_list()[0:100]
+#   if not 'google_results' in os.listdir('.'):
+#     os.mkdir('google_results')
   for item in inventory_list:
     name = item["nameHk"]
     id = item["ID"]
@@ -29,8 +29,8 @@ def prepare_product_descriptions():
     if name == "" or 'testing' in name:
       continue
     image_url = "https://www.kolpartner.cn/kol-rest/" + item["imageMain"]
-    description = find_description(name, id)
-    make_product_description_file(id, name, description)
+#     description = find_description(name, id)
+#     make_product_description_file(id, name, description)
     product_to_image_dictionary[name] = image_url
   json.dump(product_to_image_dictionary, open('product_to_image_dictionary.json', 'w', encoding='utf8'), indent=4, ensure_ascii=False)
   

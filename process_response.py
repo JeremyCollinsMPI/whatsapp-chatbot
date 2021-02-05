@@ -6,14 +6,18 @@ from datetime import time
 from backer import *
 from recommendation import *
 from translation import *
+from backer.example_flows import *
 
-def classify(text):
-  return 'asking for product recommendation'
+# def classify_chatbot_query(text):
+#   return 'asking for product recommendation'
+
+
 
 def process_response(text):
   text = translate(text)
-  classification = classify(text)
-  if classification ==  'asking for product recommendation':
+  classification = classify_chatbot_query(text, use_intent=False)
+  print('classification, ', classification)
+  if classification ==  'asking for recommendation':
     response = recommendation_flow(text)
     
     
@@ -29,7 +33,8 @@ def process_response(text):
     '''
 
     return response
-
+  else:
+    return [{'type': 'Do not respond'}]
 
 
 

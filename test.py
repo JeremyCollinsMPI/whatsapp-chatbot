@@ -9,6 +9,7 @@ import json
 from prepare_product_descriptions import *
 from use_google_sheet import *
 from secrets import *
+from new_orders_workflow import *
 
 def test1():
   send_message('hello')
@@ -287,8 +288,47 @@ def test47():
 def test48():
   chat_manager = ChatManager('447756189127')
   chat_manager.run()
+
+def test49():
+  print(classify_chatbot_query('i would like to buy a toothbrush')) 
+  chat_manager = ChatManager('447756189127')
+  chat_manager.run()
+
+def test50():
+  '''
+  when a new message comes in, then a chatmanager needs to be created for that number
+  passing a token as well
   
-test48()
+  
+  '''
+  chat_manager_creator = ChatManagerCreator()
+  chat_manager_creator.run()
+
+def test51():
+  prepare_product_descriptions()
+
+def test52():
+  chat_manager_creator = ChatManagerCreator()
+  chat_manager_creator.run()
+
+def test53():
+  product_descriptions, product_names = load_product_descriptions_and_names()
+  product_name_translations = load_product_name_translations(product_names)
+  
+def test54():
+  chat_manager_creator = ChatManagerCreator()
+  chat_manager_creator.run()
+
+def test55():
+  orders = json.load(open('list_of_orders.json', 'r'))
+  for order in orders['data']['list']:
+    print(make_message_from_new_order(order))
+
+def test56():
+  chat_manager_creator = ChatManagerCreator()
+  chat_manager_creator.message_any_new_orders()
+
+test56()
 
 
 

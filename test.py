@@ -328,7 +328,45 @@ def test56():
   chat_manager_creator = ChatManagerCreator()
   chat_manager_creator.message_any_new_orders()
 
-test56()
+def test57():
+  '''
+  someone asks about a product, and also not necessarily in the same message asks about the price
+  let's say in the most recent set of messages
+  let's also say there is a check that the user is talking about only one product;
+  or alternatively, could return a list of product names and prices
+  so you get the most recent sent messages
+  so you also need to have it wait a while to make sure all the messages come in, rather than responding immediately
+  
+  another thing would be if someone asks how much something is when the product is actually named by the chatdaddy user e.g. Queenie.
+  
+  sticking with the first case for now.
+  steps:
+  1. get new messages sent by someone.  
+  2. have a very strict screening for whether the chatbot can be used to respond.  in this case, you are asking it
+  to recognise messages asking about a price of a product.  but the other flow asking for recommendations also has
+  to be updated to be stricter.
+  3. if one of the messages is asking about the price of a product, it then needs to go back through the most recent
+  sent messages by that person (in the first use case) to find the mention of the product.  if it cannot be found, then do not answer.
+  4. find products on the website that are most relevant
+  5. return a list of products that are relevant with the prices.
+  
+  '''
+
+
+  '''
+  the next flow I want is images.  a user sends something like 你有冇呢個牌子? and an image.
+  the steps:
+  1. get new messages sent by someone
+  2. screen for whether there is a query about whether they have a certain product; or alternatively whether they are asking for a price.
+  perhaps can combine anyway, since it would be usual to give the price. 
+  3. go through the messages to find a mention of a product.  if there are messages that are images, then turn them into ocr'd text.  
+  if the product mention cannot be found, then do not answer.
+  4. find products on the website that are most relevant
+  5. return a list of products that are relevant with the prices.
+  '''
+
+
+test57()
 
 
 

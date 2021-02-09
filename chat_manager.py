@@ -95,7 +95,7 @@ class ChatManagerCreator:
   def message_any_new_orders(self):
     start_date = date.today().strftime("%Y-%m-%d")
     end_date = date.today().strftime("%Y-%m-%d")
-    new_orders = get_new_orders(start_date, end_date)['data']['list']
+    new_orders n= get_new_orders(start_date, end_date)['data']['list']
     for order in new_orders:
       phone_number = order['region'].replace('+','') + order['mobile']
       message = make_message_from_new_order(order)

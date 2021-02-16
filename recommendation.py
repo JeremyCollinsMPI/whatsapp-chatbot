@@ -2,6 +2,7 @@ from backer.example_flows import *
 import json
 import os
 from translation import translate
+from kol import *
 
 def load_product_to_image_dictionary():
   product_to_image_dictionary = json.load(open('product_to_image_dictionary.json', 'r'))
@@ -12,13 +13,15 @@ def load_product_descriptions_and_names():
   dir = os.listdir(dir_name)
   product_descriptions = []
   product_names = []
+  ids = []
   for i in range(0,10000):
     if str(i) + '.json' in dir:
+      ids.append(str(i))
       with open(dir_name + '/' + str(i) + '.json', 'r') as file:
         dict = json.load(file)
         product_descriptions.append(dict['description'])
         product_names.append(dict['name'])  
-  return product_descriptions, product_names
+  return product_descriptions, product_names, ids
 
 def load_product_name_translations(product_names):
   if 'product_name_translations.json' in os.listdir('.'):
@@ -27,6 +30,24 @@ def load_product_name_translations(product_names):
   for product_name in product_names:
     product_name_translations[product_name] = translate(product_name)
   json.dump(product_name_translations, open('product_name_translations.json', 'w', encoding='utf8'), indent=4, ensure_ascii=False)
+
+def use_json_file(function):
+  function_name = function.__name__
+  function_name = function_name.replace('load_', '')
+  def wrapper_function(*args):
+    if function_name + '.json' in os.listdir('.'):
+      return json.load(open(function_name + '.json', 'r'))
+    x = function(*args)
+    json.dump(x, open(function_name + '.json', 'w', encoding='utf8'), indent=4, ensure_ascii=False)
+    return x
+  return wrapper_function
+
+@use_json_file
+def load_product_names_to_ids_dictionary(product_names, ids):
+  result = {}
+  for i in range(len(ids)):
+    result[product_names[i]] = ids[i]
+  return result
 
 def invert_dictionary(my_map):
   inv_map = {v: k for k, v in my_map.items()}
@@ -42,7 +63,6 @@ def recommendation_flow(text):
   print(product_names)
   text_response, product = find_most_relevant_products(query, product_names, product_descriptions, use_api=True,
   just_use_names=False, product_name_translations=product_name_translations, product_name_translations_reversed=product_name_translations_reversed)
-  
   response = [{'type': 'text', 'text': text_response}]
   try:
     image = product_to_image_dictionary[product]
@@ -50,7 +70,36 @@ def recommendation_flow(text):
   except:
     pass
   return response
+
+def make_query(texts):
+  return ' . '.join(texts)
   
+def make_price_response(product, product_names_to_ids_dictionary):
+  id = product_names_to_ids_dictionary[product]
+  price = find_price(id)
+  return '$' + str(price)
+
+def recommendation_and_price_flow(texts):
+  product_descriptions, product_names, ids = load_product_descriptions_and_names()
+  product_name_translations = load_product_name_translations(product_names)
+  product_name_translations_reversed = invert_dictionary(product_name_translations)
+  product_to_image_dictionary = load_product_to_image_dictionary()
+  product_names_to_ids_dictionary = load_product_names_to_ids_dictionary(product_names, ids)
+  query = make_query(texts)
+  text_response, product = find_most_relevant_products(query, product_names, product_descriptions, use_api=True,
+  just_use_names=False, product_name_translations=product_name_translations, product_name_translations_reversed=product_name_translations_reversed)  
+  response = [{'type': 'text', 'text': text_response}]
+  price_response = make_price_response(product, product_names_to_ids_dictionary)
+  response[0]['text'] = response[0]['text'] + ', ' + price_response
+  try:
+    image = product_to_image_dictionary[product]
+    response.append({'type': 'image', 'url': image})
+  except:
+    pass
+  return response
+
+
+   
 
 '''
 sentence in english is sent

@@ -37,3 +37,9 @@ def get_new_orders(start_date, end_date, kol_token=None):
     kol_token = get_kol_token()
   r = requests.get("https://www.kolpartner.cn/kol-rest/order?search=&count=10&page=1&direction=desc&orderBy=orderNumber&paymentStatus=S&orderStatus=&startDate=" + start_date + "&endDate=" + end_date, headers={'Authorization': kol_token})
   return r.json()
+
+def find_price(id, kol_token=None):
+  if kol_token==None:
+    kol_token = get_kol_token()
+  r = requests.get("https://www.kolpartner.cn/kol-rest/product?page=1&count=10&direction=desc&categoryID=0&status=&declaration=&orderBy=ID&ID=" + str(id), headers={'Authorization': kol_token})
+  return r.json()['data']['list'][0]['marketPrice']

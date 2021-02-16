@@ -365,8 +365,18 @@ def test57():
   5. return a list of products that are relevant with the prices.
   '''
 
+def test58():
+  @use_json_file
+  def load_monkey():
+    return {'result': 'hello'}
+  print(load_monkey())
 
-test57()
+def test59():
+  texts = ['how much is this?', 'arista test']
+  print(recommendation_and_price_flow(texts))
+  
+
+test59()
 
 
 

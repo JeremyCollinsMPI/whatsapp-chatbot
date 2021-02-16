@@ -13,28 +13,58 @@ from backer.example_flows import *
 
 
 
-def process_response(text):
-  text = translate(text)
-  classification = classify_chatbot_query(text, use_intent=False)
-  print('classification, ', classification)
-  if classification ==  'asking for recommendation':
-    response = recommendation_flow(text)
-    
-    
-    '''
-    the idea is that backer is running on google cloud
-    say for the moment that it calls the docker image running on 
-    this laptop.
-    so it loads product descriptions, etc.
-    https://www.kolpartner.cn/kol-rest/uploadfile/2020/1126/f5e0d8245b4babbaa29606cd8ff700cc.jpg
+def process_response(chat):
+  '''
+  need to get the last sent messages by the client, in the first version.
+  each message needs to be translated.
+  each message then needs to be classified.
+  
+  structure of chat is:
+  
+  
+  '''
 
-       
-    
-    '''
+  texts = get_last_sent_messages_by_client(chat)
+  translated_texts = [translate(x) for x in texts]
+  classifications = [classify_chatbot_query(x, use_intent=False) for x in translated_texts]
+  for classification in classifications:
+    if classification in ['asking for recommendation', 'asking for price']:
+      response = recommendation_and_price_flow(texts)
+      return response
+  return [{'type': 'Do not respond'}]
 
-    return response
-  else:
-    return [{'type': 'Do not respond'}]
+
+
+
+
+
+
+
+
+
+
+# def process_response(text):
+#   text = translate(text)
+#   classification = classify_chatbot_query(text, use_intent=False)
+#   print('classification, ', classification)
+#   if classification ==  'asking for recommendation':
+#     response = recommendation_flow(text)
+#     
+#     
+#     '''
+#     the idea is that backer is running on google cloud
+#     say for the moment that it calls the docker image running on 
+#     this laptop.
+#     so it loads product descriptions, etc.
+#     https://www.kolpartner.cn/kol-rest/uploadfile/2020/1126/f5e0d8245b4babbaa29606cd8ff700cc.jpg
+# 
+#        
+#     
+#     '''
+# 
+#     return response
+#   else:
+#     return [{'type': 'Do not respond'}]
 
 
 

@@ -60,9 +60,13 @@ class ChatManager:
       last_message = find_last_message(chat)
       if not last_message_is_from_me(last_message):
         print('Received text')
+        '''
+        actually need the whole conversation, not the last message.
+        changing that part now.
+        '''
         text = get_text_of_message_if_not_from_me(last_message)
         print(text)
-        response = process_response(text)  
+        response = process_response(chat)  
         print(response)
         if self.mode == 'production':
           for item in response:
@@ -95,7 +99,7 @@ class ChatManagerCreator:
   def message_any_new_orders(self):
     start_date = date.today().strftime("%Y-%m-%d")
     end_date = date.today().strftime("%Y-%m-%d")
-    new_orders n= get_new_orders(start_date, end_date)['data']['list']
+    new_orders = get_new_orders(start_date, end_date)['data']['list']
     for order in new_orders:
       phone_number = order['region'].replace('+','') + order['mobile']
       message = make_message_from_new_order(order)

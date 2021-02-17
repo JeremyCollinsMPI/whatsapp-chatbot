@@ -374,9 +374,12 @@ def test58():
 def test59():
   texts = ['how much is this?', 'arista test']
   print(recommendation_and_price_flow(texts))
-  
 
-test59()
+def test60():
+  chat_manager_creator = ChatManagerCreator()
+  chat_manager_creator.run()
+
+test60()
 
 
 

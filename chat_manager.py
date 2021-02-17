@@ -66,6 +66,7 @@ class ChatManager:
         '''
         text = get_text_of_message_if_not_from_me(last_message)
         print(text)
+        print(chat)
         response = process_response(chat)  
         print(response)
         if self.mode == 'production':
@@ -77,7 +78,8 @@ class ChatManager:
             print('allowed phone number')
             for item in response:
               sleep(2)
-              self.send_item(item)                     
+              self.send_item(item) 
+              print(item)                    
 
 class ChatManagerCreator:
   def __init__(self):
@@ -91,8 +93,9 @@ class ChatManagerCreator:
       if not last_message_is_from_me(last_message):
         timestamp =  last_message['messageTimestamp']['low'] 
         now = int(time.time())
-        threshold = 10 * 60
-        if timestamp >= now - threshold:
+        threshold_1 = 10 * 60
+        threshold_2 =  10
+        if timestamp >= now - threshold_1 and timestamp <= now - threshold_2:
           result.append(chat['jid'].replace('@s.whatsapp.net', ''))
     return result
     
@@ -136,6 +139,11 @@ class ChatManagerCreator:
         chat_manager = ChatManager(phone_number, self.token)
         chat_manager.run()
       sleep(10)
+
+
+
+
+
 #       self.message_any_new_orders()
 # class CovidChatManager:
 # 

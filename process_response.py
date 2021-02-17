@@ -8,23 +8,25 @@ from recommendation import *
 from translation import *
 from backer.example_flows import *
 
-# def classify_chatbot_query(text):
-#   return 'asking for product recommendation'
+def sort_by_timestamp(messages):
+  messages = sorted(messages, key= lambda x: x['messageTimestamp']['low'])
+  return messages
 
-
-
+def get_last_sent_messages_by_client(chat):
+  result = []
+  messages = chat['messages']
+  messages = sort_by_timestamp(messages)
+  for i in range(len(messages)):
+    index = i * -1
+    if not messages[index]['key']['fromMe']:
+      result.append(messages[index]['message']['conversation'])
+    else:
+      break
+  return result
+    
 def process_response(chat):
-  '''
-  need to get the last sent messages by the client, in the first version.
-  each message needs to be translated.
-  each message then needs to be classified.
-  
-  structure of chat is:
-  
-  
-  '''
-
   texts = get_last_sent_messages_by_client(chat)
+  print(texts)
   translated_texts = [translate(x) for x in texts]
   classifications = [classify_chatbot_query(x, use_intent=False) for x in translated_texts]
   for classification in classifications:
